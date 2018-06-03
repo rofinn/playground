@@ -1,0 +1,94 @@
+# NOTE: yaml_rust is picky about indentation, so make sure you're following the same 4 spaces
+# pattern already used.
+name: playground
+version: "0.1.0"
+author: Rory Finnegan <rory.finnegan@gmail.com>
+about: Virtual environment management
+args:
+    - verbose:
+        short: v
+        multiple: true
+        help: Sets the level of verbosity
+subcommands:
+    - julia:
+        about: Julia Environments
+        version: "0.1.0"
+        author: Rory Finnegan <rory.finnegan@gmail.com>
+        subcommands:
+            - install:
+                about: Installs julia version for you
+                args:
+                    - labels:
+                        short: l
+                        value_name: LABEL
+                        help: Extra labels to apply to the new julia binary.
+                        takes_value: true
+                subcommands:
+                    - download:
+                        - VERSION:
+                            help: The release version available to download at http://julialang.org/downloads/
+                            required: true
+                            index: 1
+                    - link:
+                        - DIR:
+                            help: The path to a julia executable you'd like to be made available to playgrounds.
+            - create:
+                about: Builds the playground
+                args:
+                    - DIR:
+                        help: Where to create the playground. Defaults to the current working directory (can be changed in `~/.playground/config`.
+                    - requirements:
+                        short: r
+                        help: A REQUIRE or DECLARE file of dependencies to install into the playground.
+                        takes_value: true
+                    - name:
+                        short: 'n'
+                        help: A global name to allow activating the playground from anywhere.
+                        takes_value: true
+                    - julia-version:
+                        short: j
+                        help: The version(s) of julia available to use. If multiple versions are provided the first entry will be the one used by `julia`. By default the user/system level version is used.
+                        takes_value: true
+                    - registry:
+                        help: The url of the packagee registry to be cloned when initializing the package directory.
+                        takes_value: true
+                    - branch:
+                        help: The registry branch to check out.
+                        takes_value: true
+            - activate:
+                about: Activates the playground
+                args:
+                    - DIR:
+                        help: Where to create the playground. Defaults to the current working directory (can be changed in `~/.playground/config`.
+                    - name:
+                        short: 'n'
+                        help: A global name to allow activating the playground from anywhere.
+                        takes_value: true
+            - list:
+                about: Lists available julia versions and playgrounds
+                args:
+                    - show-links:
+                        short: s
+                        help: Display the source path if julia-versions or playgrounds are just symlinks.
+            - clean:
+                about: Deletes any dead julia-version or playground links, in case you've deleted the original folders.
+            - remove:
+                about: Deletes the specifid julia-version or playground
+                args:
+                    - NAME:
+                        help: Deletes the playground directory with the given name and the link to it.
+                    - dir:
+                        help: Deletes the provided playground directory and the link to it.
+                        takes_value: true
+            - execute:
+                about: Execute a cmd inside a playground and exit
+                args:
+                    - CMD:
+                        help: The command you would like to run inside the playground.
+                        required: true
+                    - DIR:
+                        help: Where to create the playground. Defaults to the current working directory (can be changed in `~/.playground/config`.
+                    - name:
+                        short: 'n'
+                        help: A global name to allow activating the playground from anywhere.
+                        takes_value: true
